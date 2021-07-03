@@ -1,3 +1,5 @@
+name: Publish
+
 'on':
   release:
     types:
@@ -22,7 +24,7 @@ jobs:
           node-version: 16
           registry-url: 'https://registry.npmjs.org'
       - run: npm install
-      - run: npm publish
+      - run: npm publish --public
         env:
           NODE_AUTH_TOKEN: '${{ secrets.NPM_TOKEN }}'
   publish-gpr:
