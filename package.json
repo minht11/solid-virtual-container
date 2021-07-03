@@ -1,0 +1,59 @@
+{
+  "name": "@minht11/solid-virtual-container",
+  "version": "0.1.0",
+  "description": "Virtual list/grid for Solid-js.",
+  "author": "Justinas Delinda",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/minht11/solid-virtual-container.git"
+  },
+  "main": "./dist/cjs/index.js",
+  "module": "./dist/esm/index.js",
+  "exports": {
+    ".": {
+      "solid": "./dist/source/index.jsx",
+      "import": "./dist/esm/index.js",
+      "browser": "./dist/esm/index.js"
+    }
+  },
+  "types": "./dist/types/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "sideEffects": false,
+  "keywords": [
+    "solid-js",
+    "virtual-list",
+    "virtual-grid",
+    "virtual-scroller",
+    "virtual",
+    "virtualized",
+    "scrolling",
+    "scroller",
+    "infinite"
+  ],
+  "scripts": {
+    "build": "rollup -c",
+    "watch": "rollup -cw",
+    "test": "wtr test/**/*.test.tsx --node-resolve",
+    "test:watch": "wtr test/**/*.test.tsx --node-resolve --watch",
+    "coverage": "wtr test/**/*.test.tsx --node-resolve --coverage",
+    "prettier": "npx prettier src --check",
+    "prettier:fix": "npm run prettier -- --write"
+  },
+  "devDependencies": {
+    "@esm-bundle/chai": "^4.3.4",
+    "@web/dev-server-esbuild": "^0.2.12",
+    "@web/test-runner": "^0.13.13",
+    "prettier": "^2.3.2",
+    "rollup-preset-solid": "^1.0.0",
+    "typescript": "^4.3.4"
+  },
+  "peerDependencies": {
+    "solid-js": ">= 1.0.0"
+  },
+  "publishConfig": {
+   "registry": "https://npm.pkg.github.com"
+  }
+}
