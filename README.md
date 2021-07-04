@@ -7,9 +7,14 @@ Efficient, single direction virtual list/grid for Solid-js
 * Keyboard navigation and focus management out of the box.
 * Option to change items size based on available space.
 
-[Demo](https://codesandbox.io/s/friendly-darkness-pk74r)
+[Demo](https://codesandbox.io/s/minht11solid-virtual-container-demo-pk74r)
 
 ## Usage
+
+```
+npm install @minht11/solid-virtual-container
+```
+
 Create list item component.
 ```tsx
 const ListItem = (props) => (
@@ -26,6 +31,8 @@ const ListItem = (props) => (
 ```
 Create vertically scrolling virtual list
 ```tsx
+import { VirtualContainer } from "@minht11/solid-virtual-container"
+
 const App = () => {
   const items = [0, 1, 2, 3]
   let scrollTargetElement!: HTMLDivElement
