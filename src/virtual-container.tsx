@@ -282,10 +282,10 @@ export function VirtualContainer<T>(props: VirtualContainerProps<T>) {
       return
     }
 
-    setTimeout(() => {
+    queueMicrotask(() => {
       foundEl.focus()
       foundEl.scrollIntoView({ block: 'nearest' })
-    }, 0)
+    })
   }
 
   const onKeydownHandle = (e: KeyboardEvent) => {
@@ -297,10 +297,15 @@ export function VirtualContainer<T>(props: VirtualContainerProps<T>) {
     const isArrowRight = code === 'ArrowRight'
 
     const isArrowUpOrDown = isArrowUp || isArrowDown
-    const isArrowDownOrRight = isArrowDown || isArrowRight
+    const isArrowLeftOrRight = isArrowLeft || isArrowRight
 
-    if (isArrowDownOrRight || isArrowUp || isArrowLeft) {
-      moveFocusHandle(isArrowDownOrRight ? 1 : -1, isArrowUpOrDown)
+    if (isArrowUpOrDown || isArrowLeftOrRight) {
+      const isArrowDownOrRight = isArrowDown || isArrowRight
+
+      moveFocusHandle(
+        isArrowDownOrRight ? 1 : -1,
+        isDirectionHorizontal() ? isArrowLeftOrRight : isArrowUpOrDown,
+      )
     } else if (code === 'Enter') {
       if (!clickFocusedElement(containerEl())) {
         return
@@ -320,11 +325,11 @@ export function VirtualContainer<T>(props: VirtualContainerProps<T>) {
   }
 
   const onFocusOutHandle = async () => {
-    setTimeout(() => {
+    queueMicrotask(() => {
       if (!doesElementContainFocus(containerEl())) {
         setState('focusPosition', 0)
       }
-    }, 0)
+    })
   }
 
   return (
