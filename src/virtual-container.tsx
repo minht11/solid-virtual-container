@@ -32,15 +32,41 @@ export interface VirtualState {
   }
 }
 
-const STATIC_ITEM_STYLES = {
-  'box-sizing': 'border-box',
-  contain: 'strict',
-  position: 'absolute',
-  top: 0,
-  left: 0,
+const uniqueHash = Math.random().toString(36).slice(2, Infinity)
+// Avoid conflicting class names.
+const CONTAINER_CLASSNAME = `virtual-container-${uniqueHash}`
+
+let globalContainerStylesheet: HTMLStyleElement
+
+// Dom bindings are expensive. Even setting the same style values
+// causes performance issues, so instead apply static styles
+// ahead of time using global style tag.
+const insertGlobalStylesheet = () => {
+  if (!globalContainerStylesheet) {
+    globalContainerStylesheet = document.createElement('style')
+    globalContainerStylesheet.type = 'text/css'
+
+    globalContainerStylesheet.textContent = `
+      .${CONTAINER_CLASSNAME} {
+        position: relative !important;
+        flex-shrink: 0 !important;
+      }
+      .${CONTAINER_CLASSNAME} > * {
+        will-change: transform !important;
+        box-sizing: border-box !important;
+        contain: strict !important;
+        position: absolute !important;
+        top: 0 !important;
+        left: 0 !important;
+      }
+    `
+    document.head.appendChild(globalContainerStylesheet)
+  }
 }
 
 export function VirtualContainer<T>(props: VirtualContainerProps<T>) {
+  insertGlobalStylesheet()
+
   const [state, setState] = createStore<VirtualState>({
     focusPosition: 0,
     mainAxis: {
@@ -121,8 +147,6 @@ export function VirtualContainer<T>(props: VirtualContainerProps<T>) {
     return {
       [property]: `${containerSize}px`,
       [property2]: '100%',
-      position: 'relative',
-      'flex-shrink': 0,
     }
   }
 
@@ -148,7 +172,6 @@ export function VirtualContainer<T>(props: VirtualContainerProps<T>) {
       transform: `translate(${xTranslate}px, ${yTranslate}px)`,
       width: width ? `${width}px` : '',
       height: height ? `${height}px` : '',
-      ...STATIC_ITEM_STYLES,
     }
   }
 
@@ -335,7 +358,7 @@ export function VirtualContainer<T>(props: VirtualContainerProps<T>) {
   return (
     <div
       ref={setContainerRefEl}
-      className={props.className}
+      className={`${CONTAINER_CLASSNAME} ${props.className || ''}`}
       style={containerStyleProps()}
       onKeyDown={onKeydownHandle}
       onFocusIn={onFocusInHandle}

@@ -1,5 +1,5 @@
 import { createComputed, untrack } from 'solid-js'
-import { createStore } from 'solid-js/store'
+import { createStore, unwrap } from 'solid-js/store'
 import { Measurements } from './create-measurements-observer'
 import { diffPositions } from './diff-positions'
 import { getFiniteNumberOrZero } from './utils'
@@ -99,7 +99,8 @@ export const createMainAxisPositions = (
       positionCount: state.positionCount,
       startPosition: state.currentPosition,
       prevStartPosition: prevPosition,
-      prevPositions: untrack(() => state.positions),
+      // Unwrap positions, because proxy access has non negligible performance cost.
+      prevPositions: untrack(() => unwrap(state.positions)),
     })
 
     setState('positions', newPositions)

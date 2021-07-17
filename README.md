@@ -184,3 +184,5 @@ const calculateItemSize = (crossAxisSize: number) => {
 
 ## Limitations
 Different individual item sizes and scrolling with both directions at the same time are not and likely will never be supported by this package.
+
+Page CSP must allow inline style sheets.
