@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.2.1 - 2021-08-06
+Fix rendering error when container is created, but not attached to the dom yet.
+
 ## 0.2.0 - 2021-07-17
 - New requirement: CSP must allow inline style tags.
 - Static styles are now applied using inline global style tag instead of setting them directly. This has minor performance improvement.

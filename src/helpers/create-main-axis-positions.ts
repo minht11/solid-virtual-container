@@ -1,4 +1,4 @@
-import { createComputed, untrack } from 'solid-js'
+import { createComputed, createMemo, untrack } from 'solid-js'
 import { createStore, unwrap } from 'solid-js/store'
 import { Measurements } from './create-measurements-observer'
 import { diffPositions } from './diff-positions'
@@ -17,7 +17,6 @@ interface State {
   positionCount: number
   currentPosition: number
   maxScrollPosition: number
-  positions: number[]
 }
 
 export const createMainAxisPositions = (
@@ -30,7 +29,6 @@ export const createMainAxisPositions = (
     positionCount: 0,
     maxScrollPosition: 0,
     currentPosition: 0,
-    positions: [],
   })
 
   createComputed(() => {
@@ -88,25 +86,25 @@ export const createMainAxisPositions = (
   })
 
   let prevPosition = 0
-  createComputed(() => {
+  const positions = createMemo<number[]>((prev = []) => {
     if (!measurements.isMeasured) {
-      return
+      return prev
     }
 
+    const startPosition = state.currentPosition
     const newPositions = diffPositions({
       total: axis.totalItemCount,
       focusPosition: axis.focusPosition,
       positionCount: state.positionCount,
-      startPosition: state.currentPosition,
+      startPosition,
       prevStartPosition: prevPosition,
-      // Unwrap positions, because proxy access has non negligible performance cost.
-      prevPositions: untrack(() => unwrap(state.positions)),
+      prevPositions: prev,
     })
 
-    setState('positions', newPositions)
+    prevPosition = startPosition
 
-    prevPosition = state.currentPosition
+    return newPositions
   })
 
-  return () => state.positions
+  return positions
 }

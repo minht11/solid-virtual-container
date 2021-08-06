@@ -1,6 +1,5 @@
 import {
   createSignal,
-  on,
   createMemo,
   useContext,
   createEffect,
@@ -188,26 +187,25 @@ export const createMeasurementsObserver = (
     setMeasurements('mainAxisScrollValue', getLiveScrollValue())
   }
 
-  createEffect(
-    on(targetEl, (target) => {
-      const container = containerEl()
-      if (!target) {
-        return
-      }
+  createEffect(() => {
+    const target = targetEl()
+    const container = containerEl()
+    if (!target || !container) {
+      return
+    }
 
-      target.addEventListener('scroll', onScrollHandle)
+    target.addEventListener('scroll', onScrollHandle)
 
-      ro.observe(target)
-      ro.observe(container)
+    ro.observe(target)
+    ro.observe(container)
 
-      onCleanup(() => {
-        setMeasurements('isMeasured', false)
-        target.removeEventListener('scroll', onScrollHandle)
-        ro.unobserve(target)
-        ro.unobserve(container)
-      })
-    }),
-  )
+    onCleanup(() => {
+      setMeasurements('isMeasured', false)
+      target.removeEventListener('scroll', onScrollHandle)
+      ro.unobserve(target)
+      ro.unobserve(container)
+    })
+  })
 
   return {
     containerEl,

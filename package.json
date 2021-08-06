@@ -1,6 +1,6 @@
 {
   "name": "@minht11/solid-virtual-container",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Virtual list/grid for Solid-js.",
   "author": "Justinas Delinda",
   "license": "MIT",
