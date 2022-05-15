@@ -21,6 +21,8 @@ const ListItem = (props) => (
   <div
     // Required for items to switch places.
     style={props.style}
+    // Use CSS to set width to 100% or any other value.
+    class='width-full'
     // Used for keyboard navigation and accessibility.
     tabIndex={props.tabIndex}
     role="listitem"
@@ -74,6 +76,9 @@ const App = () => {
   )
 }
 ```
+> You can control list items styling using regular CSS, including `width` and `height`, however properties defined using `itemSize` will take a priority.
+
+> One dimensional lists require only main direction size be set using `itemSize`. For vertical scrolling that's `height` and for horizontal direction that's `width`. Multidimensional lists require both.
 ## Api
 ### ScrollTargetContext
 If you you do not have an immediate access to the VirtualContainer, or do not want to pass props several components deep you can use context api.
